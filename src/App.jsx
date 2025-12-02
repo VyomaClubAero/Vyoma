@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from "react";
 
 // Preload all images from the assets folder so paths are resolved by Vite
-// Use `import.meta.glob` with `{ eager: true }` for wider compatibility
-const __images = import.meta.glob('./assets/*.{jpg,png,svg}', { eager: true });
+const __images = import.meta.glob("./assets/*.{jpg,png,svg}", { eager: true });
 const imageMap = {};
 for (const p in __images) {
-  const name = p.replace('./assets/', '');
+  const name = p.replace("./assets/", "");
   const mod = __images[p];
   imageMap[name] = mod && mod.default ? mod.default : mod;
 }
 
-const sectionsIds = ["#about", "#what", "#achievements", "#team", "#join"];
+// Order here controls active nav highlighting
+const sectionsIds = ["#about", "#what", "#events", "#achievements", "#team"];
 
 const achievements = [
   { id: 1, src: "ach-1.jpg", alt: "Achievement 1" },
@@ -22,101 +22,58 @@ const achievements = [
   { id: 6, src: "ach-6.jpg", alt: "Achievement 6" },
 ];
 
-// You can swap these placeholders with real member details & images
 const teamMembers = [
-  {
-    id: 1,
-    name: "T Nithin",
-    role: "President",
-    img: "mem-1.jpg",
-  },
-  {
-    id: 2,
-    name: "Murthan Ashok",
-    role: "Vice President",
-    img: "mem-12.jpg",
-  },
+  { id: 1, name: "T Nithin", role: "President", img: "mem-1.jpg" },
+  { id: 2, name: "Murthan Ashok", role: "Vice President", img: "mem-12.jpg" },
   {
     id: 3,
     name: "S B Sai Bharadwaj",
-    role: "Organizational Head",
+    role: "Organizational Head",
     img: "mem-8.jpg",
   },
   {
     id: 4,
     name: "Ayushman Soni",
-    role: "Vice organizational Head",
+    role: "Vice Organizational Head",
     img: "mem-4.jpg",
   },
-  {
-    id: 5,
-    name: "Soumya Sunil",
-    role: "Secretary",
-    img: "mem-9.jpg",
-  },
+  { id: 5, name: "Soumya Sunil", role: "Secretary", img: "mem-9.jpg" },
   {
     id: 6,
-    name: "Kavin Karthik k",
-    role: "Vice secretary",
+    name: "Kavin Karthik K",
+    role: "Vice Secretary",
     img: "mem-6.jpg",
   },
-  // Add the remaining members up to 14
-  {
-    id: 7,
-    name: "P Pranathi raju",
-    role: "Treasurer",
-    img: "mem-7.jpg",
-  },
-  {
-    id: 8,
-    name: "Tejas V G",
-    role: "Deputy Treasurer",
-    img: "mem-13.jpg",
-  },
-  {
-    id: 9,
-    name: "Fayan",
-    role: "Design Head",
-    img: "mem-2.jpg",
-  },
+  { id: 7, name: "P Pranathi Raju", role: "Treasurer", img: "mem-7.jpg" },
+  { id: 8, name: "Tejas V G", role: "Deputy Treasurer", img: "mem-13.jpg" },
+  { id: 9, name: "Fayan", role: "Design Head", img: "mem-2.jpg" },
   {
     id: 10,
-    name: "Sourav kor",
-    role: "Vice designing head",
+    name: "Sourav Kori",
+    role: "Vice Designing Head",
     img: "mem-14.jpg",
   },
-
   {
     id: 11,
-    name: "Krithi suvarna",
-    role: "Media and marketing head",
+    name: "Krithi Suvarna",
+    role: "Media and Marketing Head",
     img: "mem-3.jpg",
   },
-    {
+  {
     id: 12,
     name: "Manideep M",
-    role: "Vice media and marketing head",
+    role: "Vice Media and Marketing Head",
     img: "mem-11.jpg",
   },
-  {
-    id: 13,
-    name: "Madan L N",
-    role: "Pilot",
-    img: "mem-5.jpg",
-  },
-  {
-    id: 14,
-    name: "Suchinth KG",
-    role: "Co-pilot",
-    img: "mem-10.jpg",
-  },
+  { id: 13, name: "Madan L N", role: "Pilot", img: "mem-5.jpg" },
+  { id: 14, name: "Suchinth KG", role: "Co-pilot", img: "mem-10.jpg" },
 ];
 
 function App() {
   const [activeSection, setActiveSection] = useState("#about");
   const [navOpen, setNavOpen] = useState(false);
 
-  // --- smooth scroll (with offset like your original JS) ---
+  // Smooth scroll with offset
   const scrollToTarget = (target) => {
     const el = document.querySelector(target);
     if (!el) return;
@@ -125,7 +82,7 @@ function App() {
     setNavOpen(false);
   };
 
-  // --- scroll reveal (re-using your IntersectionObserver logic) ---
+  // Reveal animations with IntersectionObserver
   useEffect(() => {
     const revealEls = document.querySelectorAll(".reveal");
 
@@ -146,7 +103,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  // --- active nav state on scroll (includes achievements section) ---
+  // Update active nav item on scroll
   useEffect(() => {
     const handleScroll = () => {
       let current = null;
@@ -167,7 +124,7 @@ function App() {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // run once on mount
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [activeSection]);
@@ -185,7 +142,7 @@ function App() {
         <header className={`nav ${navOpen ? "open" : ""}`}>
           <div className="nav-left">
             <div className="nav-logo-circle">
-              <img src={imageMap['logo.png']} alt="Vyoma Aero Club logo" />
+              <img src={imageMap["logo.png"]} alt="Vyoma Aero Club logo" />
             </div>
             <div>
               <div className="nav-title-main">Vyoma Aero Club</div>
@@ -214,6 +171,14 @@ function App() {
             </button>
             <button
               className={`nav-link ${
+                activeSection === "#events" ? "active" : ""
+              }`}
+              onClick={() => scrollToTarget("#events")}
+            >
+              Events
+            </button>
+            <button
+              className={`nav-link ${
                 activeSection === "#achievements" ? "active" : ""
               }`}
               onClick={() => scrollToTarget("#achievements")}
@@ -230,17 +195,6 @@ function App() {
             </button>
           </nav>
 
-          <button className="nav-cta" onClick={() => scrollToTarget("#join")}>
-            <span className="icon">●</span> Join Vyoma
-          </button>
-
-          <button
-            className="nav-toggle"
-            aria-label="Toggle navigation"
-            onClick={() => setNavOpen((prev) => !prev)}
-          >
-            <span></span>
-          </button>
         </header>
 
         <main>
@@ -312,7 +266,7 @@ function App() {
                     <div className="hero-logo-circle">
                       <div className="hero-logo-border"></div>
                       <div className="hero-logo-inner">
-                        <img src={imageMap['logo.png']} alt="Vyoma logo" />
+                        <img src={imageMap["logo.png"]} alt="Vyoma logo" />
                       </div>
                     </div>
                   </div>
@@ -499,12 +453,70 @@ function App() {
             </div>
           </section>
 
+          {/* EVENTS */}
+          <section id="events" className="events-section">
+            <div className="section-header reveal">
+              <div className="section-kicker">03 · Events</div>
+              <h2 className="section-title">
+                Highlights <span>from the flight line</span>
+              </h2>
+              <p className="section-subtitle">
+                Workshops, test days and showcases that turned sketches into
+                aircraft and aircraft into data.
+              </p>
+            </div>
+
+            <div className="events-grid">
+              {/* Event 1 */}
+              <div className="event-card reveal">
+                <div className="event-image">
+                  <img src={imageMap["event-1.jpg"]} alt="Aeromodelling Workshop" />
+                </div>
+                <div className="event-overlay">
+                  <h3>Aircraft Workshop for M-tech</h3>
+                  <p>
+                    “A hands-on RC aircraft workshop for M.Tech students was conducted on 21st and 22nd November, offering practical training in aeromodelling, design, assembly, and flight fundamentals.”
+                  </p>
+                  <span className="event-tag">Rc Aircraft Workshop</span>
+                </div>
+              </div>
+
+              {/* Event 2 */}
+              <div className="event-card reveal delay-1">
+                <div className="event-image">
+                  <img src={imageMap["event-2.jpg"]} alt="RC Flight Challenge" />
+                </div>
+                <div className="event-overlay">
+                  <h3>RC Workshop 25</h3>
+                  <p>
+                    “Club Vyoma conducted an RC aircraft workshop on 11th October, providing hands-on training in model building, aerodynamics, and flight fundamentals.”
+                  </p>
+                  <span className="event-tag">Workshop</span>
+                </div>
+              </div>
+
+              {/* Event 3 */}
+              <div className="event-card reveal delay-2">
+                <div className="event-image">
+                  <img src={imageMap["event-3.jpg"]} alt="Aerospace Industry Meet" />
+                </div>
+                <div className="event-overlay">
+                  <h3>Vyoma 25</h3>
+                  <p>
+                    Vyoma 25, a national-level aeromodelling competition by Club Vyoma, was held on 25–27 April, showcasing innovative RC aircraft designs, technical skills, and competitive flying challenges.”
+                  </p>
+                  <span className="event-tag">Aeromodelling Competion</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* ACHIEVEMENTS */}
           <section id="achievements">
             <div className="section-header reveal">
-              <div className="section-kicker">03 · Achievements</div>
+              <div className="section-kicker">04 · Achievements</div>
               <h2 className="section-title">
-                Milestones <span>We're Proud Of</span>
+                Milestones <span>we're proud of</span>
               </h2>
             </div>
 
@@ -516,7 +528,7 @@ function App() {
                     index < 3 ? "delay-1" : "delay-2"
                   }`}
                 >
-                  <img src={imageMap[ach.src] || ''} alt={ach.alt} />
+                  <img src={imageMap[ach.src] || ""} alt={ach.alt} />
                 </div>
               ))}
             </div>
@@ -525,13 +537,13 @@ function App() {
           {/* TEAM */}
           <section id="team">
             <div className="section-header reveal">
-              <div className="section-kicker">04 · Team</div>
+              <div className="section-kicker">05 · Team</div>
               <h2 className="section-title">
                 The crew behind <span>Vyoma</span>
               </h2>
               <p className="section-subtitle">
-                Aircraft don’t build themselves. These are the key roles
-                steering design, integration and flight days.
+                Aircraft don’t build themselves. These are the people keeping
+                design, fabrication and flight tests moving forward.
               </p>
             </div>
 
@@ -544,133 +556,97 @@ function App() {
                   }`}
                 >
                   <div className="team-img">
-                    <img src={imageMap[member.img] || ''} alt={member.name} />
+                    <img src={imageMap[member.img] || ""} alt={member.name} />
                   </div>
                   <div className="team-name">{member.name}</div>
                   <div className="team-role">{member.role}</div>
-                  <div className="team-branch">{member.branch}</div>
-                  <div className="team-tags">
-                    {(member.tags || []).map((tag) => (
-                      <span className="team-tag" key={tag}>
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
                 </article>
               ))}
             </div>
 
             <p className="team-note reveal delay-2">
-              Keep it human: real names, real branches, one clear responsibility
+              Keep it human: real names, real roles, one clear responsibility
               each. That’s enough to make the club feel serious and approachable.
             </p>
-          </section>
-
-          {/* JOIN */}
-          <section id="join">
-            <div className="section-header reveal">
-              <div className="section-kicker">05 · Join</div>
-              <h2 className="section-title">
-                Join the <span>flight path</span>
-              </h2>
-              <p className="section-subtitle">
-                You don’t need prior UAV experience. You do need curiosity,
-                patience, and willingness to learn from broken wings and noisy
-                data.
-              </p>
-            </div>
-
-            <div className="join-card reveal">
-              <div>
-                <div className="join-title">
-                  From “I like aircraft” to “I helped build this”.
-                </div>
-                <p className="join-text">
-                  Vyoma recruits students who are ready to own a part of the
-                  pipeline: design, structures, electronics, software or
-                  operations. Grades help, but we value{" "}
-                  <strong>ownership</strong> and{" "}
-                  <strong>follow-through</strong> far more.
-                </p>
-                <div className="join-meta">
-                  Tip: when you reach out, mention which part of the aircraft
-                  lifecycle you want to work on first. It helps us plug you into
-                  the right crew.
-                </div>
-              </div>
-
-              <form
-                className="join-form"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  // TODO: Replace with your real Google Form link
-                  window.open("https://docs.google.com/forms/your-form-id", "_blank");
-                }}
-              >
-                <div className="form-row">
-                  <input type="text" placeholder="Your name" required />
-                  <input type="email" placeholder="College email" required />
-                </div>
-                <div className="form-row">
-                  <input type="text" placeholder="Branch / year" />
-                  <select>
-                    <option value="">Primary interest</option>
-                    <option>Aircraft design & aero</option>
-                    <option>Structures & fabrication</option>
-                    <option>Electronics & avionics</option>
-                    <option>Flight software & controls</option>
-                    <option>Operations & competition logistics</option>
-                  </select>
-                </div>
-                <textarea
-                  placeholder="In 2–3 lines, tell us why you want to join Vyoma and what you hope to work on."
-                ></textarea>
-
-                <div className="join-footer">
-                  <button className="btn-primary" type="submit">
-                    Send interest <span className="btn-icon">➜</span>
-                  </button>
-                  <div className="helper-text">
-                    This form submits to your Google Form. Swap in your official
-                    link above when ready.
-                  </div>
-                </div>
-              </form>
-            </div>
           </section>
         </main>
 
         {/* FOOTER */}
-<footer className="footer">
-  <div>
-    © <span id="year">{year}</span> Vyoma Aero Club · Department of Aeronautical Engineering
-  </div>
+        <footer className="footer">
+          <div className="footer-container">
+            <div className="footer-grid">
+              {/* Column 1 */}
+              <div className="footer-col footer-left">
+                <div className="footer-meta">
+                  © {year} Vyoma Aero Club · Department of Aeronautical
+                  Engineering
+                </div>
+              </div>
 
-  {/* Social Links */}
-  <div className="footer-socials">
-    <a href="https://linkedin.com/in/YOUR_CLUB_LINK" target="_blank" rel="noopener noreferrer">
-      <i className="fab fa-linkedin"></i>
-    </a>
-    <a href="https://instagram.com/YOUR_CLUB_INSTA" target="_blank" rel="noopener noreferrer">
-      <i className="fab fa-instagram"></i>
-    </a>
-  </div>
+              {/* Column 2 */}
+              <div className="footer-col footer-center">
+                <h4>Faculty Coordinators</h4>
+                <p>
+                  Dr. Jini Raj —{" "}
+                  <a href="tel:+919952458480">99524 58480</a>
+                </p>
+                <p>
+                  Mr. Deepak Kumar P —{" "}
+                  <a href="tel:+919791577306">97915 77306</a>
+                </p>
 
-  {/* Built By */}
-  <div className="footer-built">
-    Built by <strong>Tabish</strong> · 
-    <a href="https://www.linkedin.com/in/itabishalam/" target="_blank" rel="noopener noreferrer">LinkedIn</a> ·
-    <a href="https://github.com/itabishalam/" target="_blank" rel="noopener noreferrer">GitHub</a>
-  </div>
+                <h4 style={{ marginTop: "1rem" }}>Student Coordinators</h4>
+                <p>
+                  Nithin — <a href="tel:+919113057554">91130 57554</a>
+                </p>
+                <p>
+                  Murthan Ashok —{" "}
+                  <a href="tel:+919606896851">96068 96851</a>
+                </p>
+              </div>
 
-  <div className="footer-links">
-    <a onClick={() => scrollToTarget("#hero")}>Back to top ↑</a>
-    <a onClick={() => scrollToTarget("#about")}>About</a>
-    <a onClick={() => scrollToTarget("#what")}>What we do</a>
-    <a onClick={() => scrollToTarget("#team")}>Team</a>
-  </div>
-</footer>
+              {/* Column 3 */}
+              <div className="footer-col footer-right">
+                <div className="footer-social-row">
+                  <a
+                    href="https://instagram.com/aeroclub_vyoma"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <span className="social-icon">📷</span>
+                    <span>@AEROCLUB_VYOMA</span>
+                  </a>
+                </div>
 
+                <div className="footer-social-row">
+                  <a href="mailto:vyomaaeroclub@gmail.com">
+                    <span className="social-icon">📧</span>
+                    <span>vyomaaeroclub@gmail.com</span>
+                  </a>
+                </div>
+
+                <div className="footer-built">
+                  <span style={{ color: "var(--gold-strong)" }}>Built by</span>{" "}
+                  <a
+                    href="https://linkedin.com/in/tabishalam"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Tabish Alam
+                  </a>{" "}
+                  ·{" "}
+                  <a
+                    href="https://github.com/TabishAlam"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
