@@ -564,10 +564,7 @@ function App() {
               ))}
             </div>
 
-            <p className="team-note reveal delay-2">
-              Keep it human: real names, real roles, one clear responsibility
-              each. That’s enough to make the club feel serious and approachable.
-            </p>
+          
           </section>
         </main>
 
