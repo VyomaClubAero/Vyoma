@@ -625,7 +625,7 @@ function App() {
                 <div className="footer-built">
                   <span style={{ color: "var(--gold-strong)" }}>Built by</span>{" "}
                   <a
-                    href="https://linkedin.com/in/tabishalam"
+                    href="https://www.linkedin.com/in/itabishalam/"
                     target="_blank"
                     rel="noreferrer"
                   >
